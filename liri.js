@@ -1,5 +1,12 @@
 
+// Load the fs package to read and write
+var fs = require('fs');
+// grabs the user's command
 var argument = process.argv[2];
+
+
+var request = require('request');
+
 
 switch(argument){
 	case 'mytweets':
@@ -22,11 +29,6 @@ switch(argument){
 		console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.")
 }
 
-
-
-
-
-
 function twitter(){
 
 }
@@ -36,7 +38,7 @@ function spotify(){
 }
 
 function movies(){
-	var request = require('request');
+	
 
 	var movieName = process.argv[3];
 	// Then run a request to the OMDB API with the movie specified 
@@ -60,14 +62,7 @@ function movies(){
 		// This line is just to help us debug against the actual URL.
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
-		// console.log(body); (use to add more info)
-
-		// var Things = ["Title", "Year"]
-		// for (var i = 0; i < Things.length; i++) {
-		// 	body = JSON.parse(body);
-		// 	var Things = [Title, Year]
-		// 	console.log(body.Things[i])
-		// }
+		// console.log(body);
 	})
 }
 
