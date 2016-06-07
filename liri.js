@@ -1,30 +1,39 @@
 
 var argument = process.argv[2];
 
+switch(argument){
+	case 'mytweets':
+		twitter();
+	break;
+
+	case 'moviethis':
+		movies();
+	break;
+
+	case 'dowhatitsays':
+		console.log("working on this part");
+	break;
+
+	case null:
+		console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.");
+	break;
+
+	default:
+		console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.")
+}
 
 
-// if (argument = null) {
-// 	console.log("Try again")
-// }
-if (argument == "mytweets") {
+
+
+
+
+function twitter(){
 
 }
 
-if (argument == "spotifythissong") {
+function spotify(){
 
-	console.log("yo momma house")
 }
-
-if (argument == "moviethis") {
-	movies();
-}
-
-if (argument == "dowhatitsays") {
-
-} 
-// if (argument == "") {} {
-// 	console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.")
-// }
 
 function movies(){
 	var request = require('request');
@@ -35,6 +44,9 @@ function movies(){
 
 
 	request(queryUrl, function(err, response, body){
+		if (err) {
+			return console.log(err);
+		}
 		body = JSON.parse(body);
 		console.log(body.Title);
 		console.log(body.Year);
@@ -45,16 +57,32 @@ function movies(){
 		console.log(body.Actors);
 		console.log(body.tomatoRating);
 		console.log("-----------------------------------------------------------------------");
+		// This line is just to help us debug against the actual URL.
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
-		// console.log(body);
+		// console.log(body); (use to add more info)
+
+		// var Things = ["Title", "Year"]
+		// for (var i = 0; i < Things.length; i++) {
+		// 	body = JSON.parse(body);
+		// 	var Things = [Title, Year]
+		// 	console.log(body.Things[i])
+		// }
 	})
-
-
-
-	// This line is just to help us debug against the actual URL.  
-	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
