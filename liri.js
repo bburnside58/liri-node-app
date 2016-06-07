@@ -42,27 +42,32 @@ function spotify(){
 }
 
 function movies(){
-	// bugs [if movie name does not exist in omdb the response is all undefined, cannot search multiple word movies properly]
 	
-	var movieName = process.argv[3];
+	var movieName = input;
 	var movieName2 = process.argv[4];
 
 	// If no movie name is given liri will provide the data from the movie Mr. Nobody
 	if (movieName == null) {
 			movieName = "Mr. Nobody";
 		}
-	// Then run a request to the OMDB API with the movie specified 
+	// Then run a request to the OMDb API with the movie specified 
 	var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=short&r=json&tomatoes=true';
 	
-	// In case the movie title is 2 words
+	// In case the movie title is 2 words (Sorry long movie names ;) )
 	if (movieName2 != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
 	}
-
+	// request function OMDb
 	request(queryUrl, function(err, response, body){
+		// In case anything catches fire
 		if (err) {
 			return console.log(err);
 		}
+		// Just in case the user searches for nonsense. 
+		if (response != true) {
+			return console.log("Movie not found.")
+		}
+		// Main purpose of function below. Console.log movie data that we want.
 		body = JSON.parse(body);
 		console.log(body.Title);
 		console.log(body.Year);
@@ -73,7 +78,6 @@ function movies(){
 		console.log(body.Actors);
 		console.log(body.tomatoRating);
 		console.log("-----------------------------------------------------------------------");
-		// This line is just to help us debug against the actual URL.
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
 		// console.log(body);
