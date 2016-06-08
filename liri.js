@@ -22,7 +22,7 @@ switch(argument){
 	break;
 
 	case 'dowhatitsays':
-		whateverYouSay();
+		whatever();
 	break;
 
 	case null:
@@ -42,28 +42,23 @@ function spotify(){
 }
 
 function movies(inputRandomTxt){
-	
-
 	// console.log(input) for testing purposes
 	var movieName = input;
 	var movieName2 = process.argv[4];
-
 	// If no movie name is given liri will provide the data from the movie Mr. Nobody
 	if (movieName == null) {
 			movieName = "Mr. Nobody";
 		}
 	// Then run a request to the OMDb API with the movie specified 
 	var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=short&r=json&tomatoes=true';
-	
 	// In case the movie title is 2 words (Sorry long movie names ;) )
 	if (movieName2 != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
 	}
-	// if user chooses dowhatitsays command, grabs datat from random.txt file
+	// if user chooses dowhatitsays command, grabs data from random.txt file
 	if (inputRandomTxt != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + inputRandomTxt +'&y=&plot=short&r=json&tomatoes=true';
 	}
-
 	// request function OMDb
 	request(queryUrl, function(err, response, body){
 		// In case anything catches fire
@@ -92,16 +87,13 @@ function movies(inputRandomTxt){
 	})
 }
 
-function whateverYouSay() {
+function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
         // text converted to array
-        var splitted = data.split(",");
-        //
-        if (splitted[0] == 'spotify-this-song') {
-            spotify(splitted[1]);
-        }
-        if (splitted[0] == 'movie-this') {
-            movies(splitted[1]);
+        var randomArray = data.split(",");
+        // passes array data to appropiate function
+        if (randomArray[0] == 'movie-this') {
+            movies(randomArray[1]);
         }
     })
 }
