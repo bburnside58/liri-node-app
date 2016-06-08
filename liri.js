@@ -7,22 +7,28 @@ var request = require('request');
 var Twitter = require('twitter');
 // grabs twitter api keys from keys.js 
 var key = require('./keys.js');
+// npm for spotify
+var spotifyReq = require('spotify');
 // grabs the user's command
 var argument = process.argv[2];
 // input data
 var input = process.argv[3];
 
-// User command - function execution
+// User command / function execution
 switch(argument){
-	case 'mytweets':
+	case 'my-tweets':
 		twitter();
 	break;
 
-	case 'moviethis':
+	case 'spotify-this-song':
+		spotify();
+	break;
+
+	case 'movie-this':
 		movies();
 	break;
 
-	case 'dowhatitsays':
+	case 'do-what-it-says':
 		whatever();
 	break;
 
@@ -45,13 +51,28 @@ function twitter(){
 	        	console.log(tweets[i].text + " " + tweets[i].created_at);
 	        	console.log('\n');
 	        }
-	        console.log("To search again type 'mytweets', space, and then the 'username'.")
+	        console.log("To search type 'my-tweets', space, and then the 'username'.");
+	        console.log("----------------------------------------------------------------");
       	}
     });
 }
 
 function spotify(){
-
+	if (input == null) {
+		input = "what's my age again";
+	}
+	spotifyReq.search({ type: 'track', query: input }, function(err, response) {
+    if ( err ) {
+        return console.log('Error occurred: ' + err);
+    }
+ 		console.log('--------------------------------------------------------------');
+        console.log('Artist(s): ' + response.tracks.items[0].artists[0].name);
+        console.log('Song Name: ' + response.tracks.items[0].name);
+        console.log('Preview Link: ' + response.tracks.items[0].preview_url);
+        console.log('Album: ' + response.tracks.items[0].album.name);
+        console.log('--------------------------------------------------------------');
+ 
+	});
 }
 
 function movies(inputRandomTxt){
@@ -64,7 +85,7 @@ function movies(inputRandomTxt){
 	if (movieName == null) {
 			movieName = "Mr. Nobody";
 		}
-	// In case the movie title is 2 words (Sorry long movie names ;) )
+	// In case the movie title is 2 words )
 	if (movieName2 != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
 	}
