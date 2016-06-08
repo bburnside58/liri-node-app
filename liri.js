@@ -3,15 +3,16 @@
 var fs = require('fs');
 //request node package to...request stuff
 var request = require('request');
+// twitter require module
+var Twitter = require('twitter');
+// grabs twitter api keys from keys.js 
+var key = require('./keys.js');
 // grabs the user's command
 var argument = process.argv[2];
 // input data
 var input = process.argv[3];
 
-
-
-
-
+// User command - function execution
 switch(argument){
 	case 'mytweets':
 		twitter();
@@ -34,7 +35,19 @@ switch(argument){
 }
 
 function twitter(){
-
+   	// twitter keys from keys.js
+    var client = new Twitter(key.twitterKeys);
+    // twitter parameters screen_name is equal to process.argv[3] a.k.a. user's input
+    var params = {screen_name: input, count: 20};
+    client.get('statuses/user_timeline', params, function(error, tweets, response){
+      	if (!error) {
+	        for (var i = 0; i < tweets.length; i++) {
+	        	console.log(tweets[i].text + " " + tweets[i].created_at);
+	        	console.log('\n');
+	        }
+	        console.log("To search again type 'mytweets', space, and then the 'username'.")
+      	}
+    });
 }
 
 function spotify(){
@@ -45,12 +58,12 @@ function movies(inputRandomTxt){
 	// console.log(input) for testing purposes
 	var movieName = input;
 	var movieName2 = process.argv[4];
+	// dynamic url 
+	var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=short&r=json&tomatoes=true';
 	// If no movie name is given liri will provide the data from the movie Mr. Nobody
 	if (movieName == null) {
 			movieName = "Mr. Nobody";
 		}
-	// Then run a request to the OMDb API with the movie specified 
-	var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=short&r=json&tomatoes=true';
 	// In case the movie title is 2 words (Sorry long movie names ;) )
 	if (movieName2 != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
@@ -91,7 +104,7 @@ function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
         // text converted to array
         var randomArray = data.split(",");
-        // passes array data to appropiate function
+        // passes array data to appropriate function
         if (randomArray[0] == 'movie-this') {
             movies(randomArray[1]);
         }
