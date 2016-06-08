@@ -64,7 +64,6 @@ function spotify(){
 	// if the song length is longer than 1 word process.argv array gets concatenated from i = 4 onward
 	if(process.argv.length > 4){
             for(var i = 4; i < process.argv.length; i++){
-
                 input += "+" +process.argv[i];
             }
         }
@@ -86,7 +85,6 @@ function movies(inputRandomTxt){
 	// handles cases of movie length > 1 word
 	if(process.argv.length > 4){
             for(var i = 4; i < process.argv.length; i++){
-
                 input += "+" +process.argv[i];
             }
         }
@@ -138,17 +136,3 @@ function whatever() {
         }
     })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
