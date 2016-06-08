@@ -22,7 +22,7 @@ switch(argument){
 	break;
 
 	case 'dowhatitsays':
-		console.log("working on this part");
+		whateverYouSay();
 	break;
 
 	case null:
@@ -41,8 +41,10 @@ function spotify(){
 
 }
 
-function movies(){
+function movies(inputRandomTxt){
 	
+
+	// console.log(input) for testing purposes
 	var movieName = input;
 	var movieName2 = process.argv[4];
 
@@ -57,18 +59,24 @@ function movies(){
 	if (movieName2 != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
 	}
+	// if user chooses dowhatitsays command, grabs datat from random.txt file
+	if (inputRandomTxt != null) {
+		var queryUrl = 'http://www.omdbapi.com/?t=' + inputRandomTxt +'&y=&plot=short&r=json&tomatoes=true';
+	}
+
 	// request function OMDb
 	request(queryUrl, function(err, response, body){
 		// In case anything catches fire
 		if (err) {
 			return console.log(err);
 		}
+		// string to JSON object
+		body = JSON.parse(body);
 		// Just in case the user searches for nonsense. 
-		if (response != true) {
+		if (body.Title == undefined) {
 			return console.log("Movie not found.")
 		}
 		// Main purpose of function below. Console.log movie data that we want.
-		body = JSON.parse(body);
 		console.log(body.Title);
 		console.log(body.Year);
 		console.log(body.imdbRating);
@@ -84,7 +92,19 @@ function movies(){
 	})
 }
 
-
+function whateverYouSay() {
+    fs.readFile('random.txt', 'utf8', function(error, data) {
+        // text converted to array
+        var splitted = data.split(",");
+        //
+        if (splitted[0] == 'spotify-this-song') {
+            spotify(splitted[1]);
+        }
+        if (splitted[0] == 'movie-this') {
+            movies(splitted[1]);
+        }
+    })
+}
 
 
 
