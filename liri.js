@@ -57,7 +57,10 @@ function twitter(){
     });
 }
 
-function spotify(){
+function spotify(inputRandomTxt){
+	if (inputRandomTxt != null) {
+		input = inputRandomTxt;
+	}
 	if (input == null) {
 		input = "what's my age again";
 	}
@@ -128,11 +131,29 @@ function movies(inputRandomTxt){
 
 function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
-        // text converted to array
+    	// text converted to array
         var randomArray = data.split(",");
+    	var evensHolder = [];
+ 
+		for (var i = 0; i < randomArray.length; ++i) { 
+		    if ((randomArray[i] % 2) === 0) {
+		        evensHolder.push(randomArray[i]);
+		    }
+		    if (evensHolder[i] == 'spotify-this-song') {
+		    	spotify(evensHolder[i]);
+		    }
+		    if (evensHolder[i] == 'movie-this') {
+		    	movies(evensHolder[i]);
+		    }
+		}
+        
         // passes array data to appropriate function
+        if (randomArray[0] == 'spotify-this-song') {
+        	spotify(randomArray[1]);
+        }
         if (randomArray[0] == 'movie-this') {
             movies(randomArray[1]);
         }
+
     })
 }
