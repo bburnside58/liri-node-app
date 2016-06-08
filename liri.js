@@ -61,6 +61,13 @@ function spotify(){
 	if (input == null) {
 		input = "what's my age again";
 	}
+	// if the song length is longer than 1 word process.argv array gets concatenated from i = 4 onward
+	if(process.argv.length > 4){
+            for(var i = 4; i < process.argv.length; i++){
+
+                input += "+" +process.argv[i];
+            }
+        }
 	spotifyReq.search({ type: 'track', query: input }, function(err, response) {
     if ( err ) {
         return console.log('Error occurred: ' + err);
@@ -76,19 +83,19 @@ function spotify(){
 }
 
 function movies(inputRandomTxt){
-	// console.log(input) for testing purposes
-	var movieName = input;
-	var movieName2 = process.argv[4];
+	// handles cases of movie length > 1 word
+	if(process.argv.length > 4){
+            for(var i = 4; i < process.argv.length; i++){
+
+                input += "+" +process.argv[i];
+            }
+        }
 	// dynamic url 
-	var queryUrl = 'http://www.omdbapi.com/?t=' + movieName +'&y=&plot=short&r=json&tomatoes=true';
+	var queryUrl = 'http://www.omdbapi.com/?t=' + input +'&y=&plot=short&r=json&tomatoes=true';
 	// If no movie name is given liri will provide the data from the movie Mr. Nobody
-	if (movieName == null) {
-			movieName = "Mr. Nobody";
+	if (input == null) {
+			input = "Mr. Nobody";
 		}
-	// In case the movie title is 2 words )
-	if (movieName2 != null) {
-		var queryUrl = 'http://www.omdbapi.com/?t=' + movieName + '+' + movieName2 +'&y=&plot=short&r=json&tomatoes=true';
-	}
 	// if user chooses dowhatitsays command, grabs data from random.txt file
 	if (inputRandomTxt != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + inputRandomTxt +'&y=&plot=short&r=json&tomatoes=true';
