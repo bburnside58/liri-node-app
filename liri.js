@@ -12,35 +12,61 @@ var spotifyReq = require('spotify');
 // grabs the user's command
 var argument = process.argv[2];
 // input data
-var input = process.argv[3];
+// var input = process.argv[3];
+// Load the NPM Package inquirer
+var inquirer = require('inquirer');
 
-// User command / function execution
-switch(argument){
-	case 'my-tweets':
-		twitter();
-	break;
 
-	case 'spotify-this-song':
-		spotify();
-	break;
 
-	case 'movie-this':
-		movies();
-	break;
 
-	case 'do-what-it-says':
-		whatever();
-	break;
+// Created a series of choices with a question 
+inquirer.prompt([
+	{
+		type: "input",
+		name: "doWhat",
+		message: "What info would you like? Type 'tweets', 'spotify', 'movie', or 'whatitsays'.",
+	},
 
-	case null:
-		console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.");
-	break;
+	{
+		type: "input",
+		name: "name",
+		message: "Enter the twitter username, song's name, or movie name based on your previous choice. For whatitsays, type nothing and hit enter.",
+	}
 
-	default:
-		console.log("Choose 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'.")
-}
+]).then(function(user) {
+	var input = user.name;
+	// User command / function execution
+	switch(user.doWhat){
+		case 'tweets':
+			twitter(input);
+		break;
 
-function twitter(){
+		case 'spotify':
+			spotify(input);
+		break;
+
+		case 'movie':
+			movies(input);
+		break;
+
+		case 'whatitsays':
+			whatever(input);
+		break;
+
+		// case null:
+		// 	console.log("Type 'tweets', 'spotify', 'movie', or 'whatitsays'.");
+		// break;
+
+		// default:
+		// 	console.log("Type 'tweets', 'spotify', 'movie', or 'whatitsays'.");
+	}
+})
+
+
+
+
+
+function twitter(input){
    	// twitter keys from keys.js
     var client = new Twitter(key.twitterKeys);
     // twitter parameters screen_name is equal to process.argv[3] a.k.a. user's input
@@ -57,7 +83,7 @@ function twitter(){
     });
 }
 
-function spotify(inputRandomTxt){
+function spotify(input, inputRandomTxt){
 	if (inputRandomTxt != null) {
 		input = inputRandomTxt;
 	}
@@ -84,19 +110,14 @@ function spotify(inputRandomTxt){
 	});
 }
 
-function movies(inputRandomTxt){
-	// handles cases of movie length > 1 word
-	if(process.argv.length > 4){
-            for(var i = 4; i < process.argv.length; i++){
-                input += "+" +process.argv[i];
-            }
-        }
+function movies(input, inputRandomTxt){
+    // If no movie name is given liri will provide the data from the movie Mr. Nobody
+	if (input == null || input == undefined) {
+			console.log("Come on Mr. Nobody");
+			input = "Mr. Nobody";
+	}
 	// dynamic url 
 	var queryUrl = 'http://www.omdbapi.com/?t=' + input +'&y=&plot=short&r=json&tomatoes=true';
-	// If no movie name is given liri will provide the data from the movie Mr. Nobody
-	if (input == null) {
-			input = "Mr. Nobody";
-		}
 	// if user chooses dowhatitsays command, grabs data from random.txt file
 	if (inputRandomTxt != null) {
 		var queryUrl = 'http://www.omdbapi.com/?t=' + inputRandomTxt +'&y=&plot=short&r=json&tomatoes=true';
@@ -133,20 +154,18 @@ function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
     	// text converted to array
         var randomArray = data.split(",");
-    	var evensHolder = [];
- 
-		for (var i = 0; i < randomArray.length; ++i) { 
-		    if ((randomArray[i] % 2) === 0) {
-		        evensHolder.push(randomArray[i]);
-		    }
-		    if (evensHolder[i] == 'spotify-this-song') {
-		    	spotify(evensHolder[i]);
-		    }
-		    if (evensHolder[i] == 'movie-this') {
-		    	movies(evensHolder[i]);
-		    }
-		}
-        
+    	// var evensHolder = [];
+		// for (var i = 0; i < randomArray.length; ++i) { 
+		//     if ((randomArray[i] % 2) === 0) {
+		//         evensHolder.push(randomArray[i]);
+		//     }
+		//     if (evensHolder[i] == 'spotify-this-song') {
+		//     	spotify(evensHolder[i]);
+		//     }
+		//     if (evensHolder[i] == 'movie-this') {
+		//     	movies(evensHolder[i]);
+		//     }
+		// }
         // passes array data to appropriate function
         if (randomArray[0] == 'spotify-this-song') {
         	spotify(randomArray[1]);
@@ -154,6 +173,5 @@ function whatever() {
         if (randomArray[0] == 'movie-this') {
             movies(randomArray[1]);
         }
-
     })
 }
