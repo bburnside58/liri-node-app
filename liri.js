@@ -1,4 +1,3 @@
-
 // Load the fs package to read and write
 var fs = require('fs');
 //request node package to...request stuff
@@ -9,15 +8,8 @@ var Twitter = require('twitter');
 var key = require('./keys.js');
 // npm for spotify
 var spotifyReq = require('spotify');
-// grabs the user's command
-var argument = process.argv[2];
-// input data
-// var input = process.argv[3];
 // Load the NPM Package inquirer
 var inquirer = require('inquirer');
-
-
-
 
 // Created a series of choices with a question 
 inquirer.prompt([
@@ -50,21 +42,14 @@ inquirer.prompt([
 		break;
 
 		case 'whatitsays':
+			var input = "Mr. Nobody";
 			whatever(input);
 		break;
 
-		// case null:
-		// 	console.log("Type 'tweets', 'spotify', 'movie', or 'whatitsays'.");
-		// break;
-
-		// default:
-		// 	console.log("Type 'tweets', 'spotify', 'movie', or 'whatitsays'.");
+		default:
+			console.log("Type 'tweets', 'spotify', 'movie', or 'whatitsays'.");
 	}
 })
-
-
-
-
 
 function twitter(input){
    	// twitter keys from keys.js
@@ -87,15 +72,9 @@ function spotify(input, inputRandomTxt){
 	if (inputRandomTxt != null) {
 		input = inputRandomTxt;
 	}
-	if (input == null) {
+	if (input == "") {
 		input = "what's my age again";
 	}
-	// if the song length is longer than 1 word process.argv array gets concatenated from i = 4 onward
-	if(process.argv.length > 4){
-            for(var i = 4; i < process.argv.length; i++){
-                input += "+" +process.argv[i];
-            }
-        }
 	spotifyReq.search({ type: 'track', query: input }, function(err, response) {
     if ( err ) {
         return console.log('Error occurred: ' + err);
@@ -106,14 +85,12 @@ function spotify(input, inputRandomTxt){
         console.log('Preview Link: ' + response.tracks.items[0].preview_url);
         console.log('Album: ' + response.tracks.items[0].album.name);
         console.log('--------------------------------------------------------------');
- 
 	});
 }
 
 function movies(input, inputRandomTxt){
     // If no movie name is given liri will provide the data from the movie Mr. Nobody
-	if (input == null || input == undefined) {
-			console.log("Come on Mr. Nobody");
+	if (input == "") {
 			input = "Mr. Nobody";
 	}
 	// dynamic url 
@@ -146,7 +123,6 @@ function movies(input, inputRandomTxt){
 		console.log("-----------------------------------------------------------------------");
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
-		// console.log(body);
 	})
 }
 
@@ -154,18 +130,6 @@ function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
     	// text converted to array
         var randomArray = data.split(",");
-    	// var evensHolder = [];
-		// for (var i = 0; i < randomArray.length; ++i) { 
-		//     if ((randomArray[i] % 2) === 0) {
-		//         evensHolder.push(randomArray[i]);
-		//     }
-		//     if (evensHolder[i] == 'spotify-this-song') {
-		//     	spotify(evensHolder[i]);
-		//     }
-		//     if (evensHolder[i] == 'movie-this') {
-		//     	movies(evensHolder[i]);
-		//     }
-		// }
         // passes array data to appropriate function
         if (randomArray[0] == 'spotify-this-song') {
         	spotify(randomArray[1]);
