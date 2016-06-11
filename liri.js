@@ -64,6 +64,12 @@ function twitter(input){
 	        console.log("To search type 'my-tweets', space, and then the 'username'.");
 	        console.log("----------------------------------------------------------------");
       	}
+      	for (var i = 0; i < tweets.length; i++) {
+      			var logData;
+	        	logData += tweets[i].text + " " + tweets[i].created_at + '\n';
+	   
+	        }
+      	dataWrite(logData);
     });
 }
 
@@ -84,6 +90,9 @@ function spotify(input, inputRandomTxt){
         console.log('Preview Link: ' + response.tracks.items[0].preview_url);
         console.log('Album: ' + response.tracks.items[0].album.name);
         console.log('--------------------------------------------------------------');
+
+        var logData = 'Artist(s): ' + response.tracks.items[0].artists[0].name + " " + 'Song Name: ' + response.tracks.items[0].name + " " + 'Preview Link: ' + response.tracks.items[0].preview_url + " " + 'Album: ' + response.tracks.items[0].album.name + '\n';
+        dataWrite(logData);
 	});
 }
 
@@ -122,7 +131,10 @@ function movies(input, inputRandomTxt){
 		console.log("-----------------------------------------------------------------------");
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
-	})
+
+		var logData = body.Title + " " + body.Year + " " + body.imdbRating + " " + body.Country + " " + body.Language + " " + body.Plot + " " + body.Actors + " " + body.tomatoRating + " " + "Rotten Tomatoes url: " + body.tomatoURL + " " + "Omdb api url: " + queryUrl + '\n';
+		dataWrite(logData);
+	});
 }
 
 function whatever() {
@@ -136,5 +148,17 @@ function whatever() {
         if (randomArray[0] == 'movie-this') {
             movies(randomArray[1]);
         }
-    })
+        // var logData2 = randomArray[1];
+        // dataWrite(logData2);
+    });
 }
+
+function dataWrite(logData){
+	fs.appendFile('log.txt', logData, 'utf8', function(err) {
+		if (err) {
+			return console.log(err);
+		}
+	});
+}
+
+
