@@ -42,7 +42,6 @@ inquirer.prompt([
 		break;
 
 		case 'whatitsays':
-			var input = "Mr. Nobody";
 			whatever(input);
 		break;
 
