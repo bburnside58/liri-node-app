@@ -64,6 +64,7 @@ function twitter(input){
 	        console.log("To search type 'my-tweets', space, and then the 'username'.");
 	        console.log("----------------------------------------------------------------");
       	}
+      	// log to text file:
       	for (var i = 0; i < tweets.length; i++) {
       			var logData;
 	        	logData += tweets[i].text + " " + tweets[i].created_at + '\n';
@@ -74,12 +75,15 @@ function twitter(input){
 }
 
 function spotify(input, inputRandomTxt){
+	// when whatitsays command is chosen input = inputRandomTxt which is data from random.txt
 	if (inputRandomTxt != null) {
 		input = inputRandomTxt;
 	}
+	// in case no song is provided, will auto search the song "what's my age again"
 	if (input == "") {
 		input = "what's my age again";
 	}
+	// spotify api 
 	spotifyReq.search({ type: 'track', query: input }, function(err, response) {
     if ( err ) {
         return console.log('Error occurred: ' + err);
@@ -90,7 +94,7 @@ function spotify(input, inputRandomTxt){
         console.log('Preview Link: ' + response.tracks.items[0].preview_url);
         console.log('Album: ' + response.tracks.items[0].album.name);
         console.log('--------------------------------------------------------------');
-
+        // log to text file
         var logData = 'Artist(s): ' + response.tracks.items[0].artists[0].name + " " + 'Song Name: ' + response.tracks.items[0].name + " " + 'Preview Link: ' + response.tracks.items[0].preview_url + " " + 'Album: ' + response.tracks.items[0].album.name + '\n';
         dataWrite(logData);
 	});
@@ -131,12 +135,12 @@ function movies(input, inputRandomTxt){
 		console.log("-----------------------------------------------------------------------");
 		console.log("Rotten Tomatoes url: " + body.tomatoURL);
 		console.log("Omdb api url: " + queryUrl);
-
+		// log to text file 
 		var logData = body.Title + " " + body.Year + " " + body.imdbRating + " " + body.Country + " " + body.Language + " " + body.Plot + " " + body.Actors + " " + body.tomatoRating + " " + "Rotten Tomatoes url: " + body.tomatoURL + " " + "Omdb api url: " + queryUrl + '\n';
 		dataWrite(logData);
 	});
 }
-
+// whatitsays function, data from random.txt file
 function whatever() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
     	// text converted to array
@@ -148,11 +152,9 @@ function whatever() {
         if (randomArray[0] == 'movie-this') {
             movies(randomArray[1]);
         }
-        // var logData2 = randomArray[1];
-        // dataWrite(logData2);
     });
 }
-
+// function to log data to log.txt
 function dataWrite(logData){
 	fs.appendFile('log.txt', logData, 'utf8', function(err) {
 		if (err) {
@@ -160,5 +162,3 @@ function dataWrite(logData){
 		}
 	});
 }
-
-
